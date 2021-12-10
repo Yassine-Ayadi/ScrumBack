@@ -41,23 +41,6 @@ export class WorkshopService {
     }
   }
 
-  async createWorkshop(
-    createWorkshopDto: CreateWorkshopDto,
-    user: User,
-  ): Promise<Workshop> {
-    try {
-      const workshop = await this.workshopRepository.save({
-        ...createWorkshopDto,
-        organiser: user,
-      });
-
-      delete workshop.organiser;
-
-      return workshop;
-    } catch (error) {
-      throw new BadRequestException('Cannot create workshop');
-    }
-  }
 
   async getPastWorkshops(): Promise<Workshop[]> {
     const myDate = new Date();
@@ -76,6 +59,7 @@ export class WorkshopService {
     return workshops;
   }
 
+  
   async getWorkshopsForUser(user: User): Promise<Workshop[]> {
     return await this.workshopRepository.find({ organiser: user });
   }
@@ -87,6 +71,27 @@ export class WorkshopService {
       throw new BadRequestException('error while finding workshops');
     }
   }
+
+  async createWorkshop(
+    createWorkshopDto: CreateWorkshopDto,
+    user: User,
+  ): Promise<Workshop> {
+    try {
+      const workshop = await this.workshopRepository.save({
+        ...createWorkshopDto,
+        organiser: user,
+      });
+
+      delete workshop.organiser;
+
+      return workshop;
+    } catch (error) {
+      throw new BadRequestException('Cannot create workshop');
+    }
+  }
+
+ 
+
 
   async findWorkshopById(id: number): Promise<Workshop> {
     try {
